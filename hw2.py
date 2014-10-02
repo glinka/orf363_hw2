@@ -1,10 +1,11 @@
-import numpy as np
+>import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import matplotlib.gridspec as gs
 from mpl_toolkits.mplot3d import Axes3D
 
 def do_hw():
+    einstein_embedding()
     fn_min_max()
 
 def einstein_embedding():
@@ -19,18 +20,11 @@ def einstein_embedding():
     m = image.shape[1]
     ax_full.imshow(rgb_to_grayscale(image), cmap="gray")
     ax_full.set_title("Original image")
-    ax_25 = fig.add_subplot(gspec[1,0])
-    ax_25.imshow(recons[0], cmap="gray")
-    ax_25.set_title("k=25")
-    ax_50 = fig.add_subplot(gspec[1,1])
-    ax_50.imshow(recons[1], cmap="gray")
-    ax_50.set_title("k=50")
-    ax_100 = fig.add_subplot(gspec[2,0])
-    ax_100.imshow(recons[2], cmap="gray")
-    ax_100.set_title("k=100")
-    ax_200 = fig.add_subplot(gspec[2,1])
-    ax_200.imshow(recons[3], cmap="gray")
-    ax_200.set_title("k=200")
+    ax_recons = [[fig.add_subplot(gspec[i,j]) for j in range(2)] for i in range(1,3)]
+    ax_recons = [ax for sublist in ax_recons for ax in sublist]
+    for i in range(4):
+        ax_recons[i].imshow(recons[i], cmap="gray")
+        ax_recons[i].set_title("k=" + str(k_vals[i]))
     plt.show(fig)
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -69,8 +63,8 @@ def svd_embed_image(image_filename, k_vals):
 def fn_min_max():
     f = lambda x,y: np.power(x, 3)/3.0 - 4*x + np.power(y, 3)/3.0 - 16*y
     n = 50
-    m = 6
-    xs, ys = np.meshgrid(np.linspace(-m, m, n), np.linspace(-m, m, n))
+    l = 6
+    xs, ys = np.meshgrid(np.linspace(-l, l, n), np.linspace(-l, l, n))
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     ax.plot_wireframe(xs, ys, f(xs, ys))
@@ -86,4 +80,3 @@ def fn_min_max():
 
 if __name__=="__main__":
     do_hw()
-
